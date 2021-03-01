@@ -1,5 +1,7 @@
 package com.register.employe.appregisterback.domain.service;
 
+import com.register.employe.appregisterback.aplication.modelDTO.UsuarioDTO;
+import com.register.employe.appregisterback.domain.constants.SecurityConstant;
 import com.register.employe.appregisterback.domain.exception.CorreoActivacionException;
 import com.register.employe.appregisterback.domain.exception.EmailExistException;
 import com.register.employe.appregisterback.domain.exception.UserNotFoundException;
@@ -10,20 +12,30 @@ import com.register.employe.appregisterback.domain.model.Token;
 import com.register.employe.appregisterback.domain.model.Usuario;
 import com.register.employe.appregisterback.domain.util.TransformadorBoolean;
 import com.register.employe.appregisterback.infraestructure.model.NotificacionEmail;
-import com.register.employe.appregisterback.infraestructure.model.UsuarioEntity;
+import com.register.employe.appregisterback.infraestructure.model.UserPrincipal;
 import com.register.employe.appregisterback.infraestructure.repository.TokenRepository;
 import com.register.employe.appregisterback.infraestructure.repository.UsuarioRepository;
+import com.register.employe.appregisterback.infraestructure.security.JwtProvider;
 import com.register.employe.appregisterback.infraestructure.service.MailService;
+import com.register.employe.appregisterback.infraestructure.transformer.UsuarioTransformer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import static com.register.employe.appregisterback.domain.constants.UsuarioConstant.*;
 
@@ -37,6 +49,8 @@ public class AuthService {
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
     public Usuario registrarUsuario(String nombres, String apellidos, String usuario, String clave, String email) throws UserNotFoundException, UsernameExisteException, EmailExistException, CorreoActivacionException {
         validateNuevoUsuarioYEmail(StringUtils.EMPTY, usuario, email);
@@ -134,9 +148,20 @@ public class AuthService {
     }
 
     private void buscarUsaurioYHabilitar(Token token) {
-//        String usuario = token.getUsuario().getUsuario();
-//        Usuario usuarioEncontrado = buscarUsuarioPorNombreUsuario(usuario);
         token.getUsuario().setSnActivo(true);
         usuarioRepository.actualizarUsuario(TransformadorBoolean.booleanToString(token.getUsuario().getSnActivo()), token.getUsuario().getIdUsuario());
+    }
+
+    public Usuario login(UsuarioDTO usuarioDTO) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usuarioDTO.getUsuario(), usuarioDTO.getClave()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        Usuario usuario = UsuarioTransformer.entityToModel(((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsuarioEntity());
+        return usuario;
+    }
+
+    public HttpHeaders getJwtHeader(UserPrincipal userPrincipal) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(SecurityConstant.JWT_TOKEN_HEADER, jwtProvider.generateJwtToken(userPrincipal));
+        return headers;
     }
 }

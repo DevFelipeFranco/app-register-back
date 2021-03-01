@@ -2,6 +2,7 @@ package com.register.employe.appregisterback.infraestructure.model;
 
 import com.register.employe.appregisterback.domain.util.TransformadorBoolean;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserPrincipal implements UserDetails {
