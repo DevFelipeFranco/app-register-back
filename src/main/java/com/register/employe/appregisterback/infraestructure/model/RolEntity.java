@@ -1,5 +1,6 @@
 package com.register.employe.appregisterback.infraestructure.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,9 +25,10 @@ public class RolEntity implements Serializable {
 
     private String descripcion;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "rolEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<AutorizacionEntity> autorizacionEntity;
-
-    @ManyToMany(mappedBy = "rolesEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private List<UsuarioEntity> usuariosEntity;
+//
+//    @ManyToMany(mappedBy = "rolesEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+//    private List<UsuarioEntity> usuariosEntity;
 }

@@ -1,31 +1,22 @@
 package com.register.employe.appregisterback.domain.service;
 
-import com.register.employe.appregisterback.aplication.modelDTO.UsuarioDTO;
-import com.register.employe.appregisterback.domain.constants.SecurityConstant;
+import com.register.employe.appregisterback.domain.enumeration.Role;
 import com.register.employe.appregisterback.domain.exception.CorreoActivacionException;
 import com.register.employe.appregisterback.domain.exception.EmailExistException;
 import com.register.employe.appregisterback.domain.exception.UserNotFoundException;
 import com.register.employe.appregisterback.domain.exception.UsernameExisteException;
-import com.register.employe.appregisterback.domain.model.Autorizacion;
 import com.register.employe.appregisterback.domain.model.Rol;
 import com.register.employe.appregisterback.domain.model.Token;
 import com.register.employe.appregisterback.domain.model.Usuario;
 import com.register.employe.appregisterback.domain.util.TransformadorBoolean;
 import com.register.employe.appregisterback.infraestructure.model.NotificacionEmail;
-import com.register.employe.appregisterback.infraestructure.model.UserPrincipal;
+import com.register.employe.appregisterback.infraestructure.model.UsuarioEntity;
 import com.register.employe.appregisterback.infraestructure.repository.TokenRepository;
 import com.register.employe.appregisterback.infraestructure.repository.UsuarioRepository;
-import com.register.employe.appregisterback.infraestructure.security.JwtProvider;
 import com.register.employe.appregisterback.infraestructure.service.MailService;
-import com.register.employe.appregisterback.infraestructure.transformer.UsuarioTransformer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,14 +40,9 @@ public class AuthService {
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtProvider jwtProvider;
 
     public Usuario registrarUsuario(String nombres, String apellidos, String usuario, String clave, String email) throws UserNotFoundException, UsernameExisteException, EmailExistException, CorreoActivacionException {
         validateNuevoUsuarioYEmail(StringUtils.EMPTY, usuario, email);
-
-        List<Autorizacion> autorizacions = Collections.singletonList(new Autorizacion(1L, "user:read"));
-        List<Rol> rols = Collections.singletonList(new Rol(1L, "ROLE_USER", autorizacions));
 
         Usuario registroUsuario = Usuario.builder()
                 .nombres(nombres)
@@ -66,8 +52,8 @@ public class AuthService {
                 .correoElectronico(email)
                 .fechaRegistro(LocalDateTime.now())
                 .snActivo(false)
-                .snBloqueado(true)
-                .roles(Collections.singletonList(new Rol(1L, "ROLE_USER", new ArrayList<>())))
+                .snNoBloqueado(true)
+                .roles(Collections.singletonList(new Rol(1L, Role.ROLE_USER.name(), new ArrayList<>())))
                 .imagenPerfilUrl(getImagenPerfilTemporar())
                 .build();
 
@@ -152,16 +138,7 @@ public class AuthService {
         usuarioRepository.actualizarUsuario(TransformadorBoolean.booleanToString(token.getUsuario().getSnActivo()), token.getUsuario().getIdUsuario());
     }
 
-    public Usuario login(UsuarioDTO usuarioDTO) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usuarioDTO.getUsuario(), usuarioDTO.getClave()));
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-        Usuario usuario = UsuarioTransformer.entityToModel(((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsuarioEntity());
-        return usuario;
-    }
-
-    public HttpHeaders getJwtHeader(UserPrincipal userPrincipal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(SecurityConstant.JWT_TOKEN_HEADER, jwtProvider.generateJwtToken(userPrincipal));
-        return headers;
+    public UsuarioEntity consultarUsuarioEntidad(String usuario) {
+        return usuarioRepository.findByUsuario(usuario);
     }
 }

@@ -1,5 +1,6 @@
 package com.register.employe.appregisterback.infraestructure.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class AutorizacionEntity implements Serializable {
 
     private String autorizacion;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_ROL")
     private RolEntity rolEntity;

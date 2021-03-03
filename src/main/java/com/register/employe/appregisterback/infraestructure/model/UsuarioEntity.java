@@ -34,14 +34,14 @@ public class UsuarioEntity implements Serializable {
     private String correoElectronico;
     private LocalDateTime fechaRegistro;
     private String snActivo;
-    private String snBloqueado;
+    private String snNoBloqueado;
     private LocalDateTime fechaUltimoIngreso;
     private LocalDateTime fechaUltimoIngresoVisualizacion;
     private String imagenPerfil;
     private String imagenPerfilUrl;
 
-    @OneToOne(mappedBy = "usuarioEntity", cascade = CascadeType.ALL)
-    private TokenEntity tokenEntity;
+//    @OneToOne(mappedBy = "usuarioEntity", cascade = CascadeType.ALL)
+//    private TokenEntity tokenEntity;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(

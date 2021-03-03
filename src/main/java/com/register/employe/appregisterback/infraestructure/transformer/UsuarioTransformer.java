@@ -2,7 +2,6 @@ package com.register.employe.appregisterback.infraestructure.transformer;
 
 import com.register.employe.appregisterback.domain.model.Usuario;
 import com.register.employe.appregisterback.domain.util.TransformadorBoolean;
-import com.register.employe.appregisterback.infraestructure.model.UserPrincipal;
 import com.register.employe.appregisterback.infraestructure.model.UsuarioEntity;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public final class UsuarioTransformer {
                     .correoElectronico(usuarioEntity.getCorreoElectronico())
                     .fechaRegistro(usuarioEntity.getFechaRegistro())
                     .snActivo(TransformadorBoolean.stringToBoolean(usuarioEntity.getSnActivo()))
-                    .snBloqueado(TransformadorBoolean.stringToBoolean(usuarioEntity.getSnBloqueado()))
+                    .snNoBloqueado(TransformadorBoolean.stringToBoolean(usuarioEntity.getSnNoBloqueado()))
                     .fechaUltimoIngreso(usuarioEntity.getFechaUltimoIngreso())
                     .fechaUltimoIngresoVisualizacion(usuarioEntity.getFechaUltimoIngresoVisualizacion())
                     .imagenPerfil(usuarioEntity.getImagenPerfil())
@@ -42,7 +41,7 @@ public final class UsuarioTransformer {
                 .correoElectronico(usuario.getCorreoElectronico())
                 .fechaRegistro(usuario.getFechaRegistro())
                 .snActivo(TransformadorBoolean.booleanToString(usuario.getSnActivo()))
-                .snBloqueado(TransformadorBoolean.booleanToString(usuario.getSnBloqueado()))
+                .snNoBloqueado(TransformadorBoolean.booleanToString(usuario.getSnNoBloqueado()))
                 .fechaUltimoIngreso(usuario.getFechaUltimoIngreso())
                 .fechaUltimoIngresoVisualizacion(usuario.getFechaUltimoIngresoVisualizacion())
                 .imagenPerfil(usuario.getImagenPerfil())
@@ -54,23 +53,4 @@ public final class UsuarioTransformer {
     public static List<Usuario> lstEntityToModel(List<UsuarioEntity> usuariosEntity) {
         return usuariosEntity.stream().map(UsuarioTransformer::entityToModel).collect(Collectors.toList());
     }
-
-//    private Usuario userPrincipalToUsuario(UserPrincipal userPrincipal) {
-//        return Usuario.builder()
-//                .idUsuario(userPrincipal.getUsuarioEntity().getIdUsuario())
-//                .nombres(userPrincipal.getUsuarioEntity().getNombres())
-//                .apellidos(userPrincipal.getUsuarioEntity().getApellidos())
-//                .usuario(userPrincipal.getUsername())
-//                .clave(userPrincipal.getPassword())
-//                .correoElectronico(userPrincipal.getUsuarioEntity().getCorreoElectronico())
-//                .fechaRegistro(userPrincipal.getUsuarioEntity().getFechaRegistro())
-//                .snActivo(userPrincipal.isEnabled())
-//                .snBloqueado(userPrincipal.isAccountNonLocked())
-//                .fechaUltimoIngreso(userPrincipal.getUsuarioEntity().getFechaUltimoIngreso())
-//                .fechaUltimoIngresoVisualizacion(userPrincipal.getUsuarioEntity().getFechaUltimoIngresoVisualizacion())
-//                .imagenPerfil(userPrincipal.getUsuarioEntity().getImagenPerfil())
-//                .imagenPerfilUrl(userPrincipal.getUsuarioEntity().getImagenPerfilUrl())
-//                .roles(RolTransformer.lstEntityToModel(userPrincipal.getUsuarioEntity().getRolesEntity()))
-//                .build();
-//    }
 }

@@ -28,7 +28,7 @@ public class ExceptionHandling implements ErrorController {
     private static final String METHOD_IS_NOT_ALLOWED = "Esta peticion del metodo no esta permitido para este endpoint. Por favor enviar un '%s' request";
     private static final String INTERNAL_SERVER_ERROR_MSG = "Ocurrio un error mientras procesaba la petición";
     private static final String INCORRECT_CREDENCIALES = "Usuario / clave incorrectas. Por favor intentelo de nuevo";
-    private static final String ACCOUNT_DISABLED = "Tu cuenta a sido desabilitada ó no has activado tu cuenta. Si esto es un error, por favor contactar al administrador";
+    private static final String ACCOUNT_DISABLED = "Tu cuenta a sido deshabilitada ó no has activado tu cuenta. Si esto es un error, por favor contactar al administrador";
     private static final String ERROR_PROCESSING_FILE = "Ocurrio un error mientras procesaba el archivo";
     private static final String NOT_ENOUGH_PERMISSION = "No tienes suficientes permisos";
     private static final String ERROR_PATH = "/error";
