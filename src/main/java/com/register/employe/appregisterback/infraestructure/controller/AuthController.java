@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -59,7 +60,7 @@ public class AuthController extends ExceptionHandling {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Usuario> registrarUsuario(@RequestBody UsuarioDTO usuarioDTO) throws UserNotFoundException, EmailExistException, CorreoActivacionException, UsernameExisteException {
+    public ResponseEntity<Usuario> registrarUsuario(@RequestBody UsuarioDTO usuarioDTO) throws UserNotFoundException, EmailExistException, CorreoActivacionException, UsernameExisteException, MessagingException {
         return ResponseEntity.status(CREATED)
                 .body(authService.registrarUsuario(usuarioDTO.getUsuario(), usuarioDTO.getApellidos(), usuarioDTO.getUsuario(), usuarioDTO.getClave(), usuarioDTO.getCorreoElectronico()));
     }

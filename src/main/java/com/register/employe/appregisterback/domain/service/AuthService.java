@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +42,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
 
-    public Usuario registrarUsuario(String nombres, String apellidos, String usuario, String clave, String email) throws UserNotFoundException, UsernameExisteException, EmailExistException, CorreoActivacionException {
+    public Usuario registrarUsuario(String nombres, String apellidos, String usuario, String clave, String email) throws UserNotFoundException, UsernameExisteException, EmailExistException, CorreoActivacionException, MessagingException {
         validateNuevoUsuarioYEmail(StringUtils.EMPTY, usuario, email);
 
         Usuario registroUsuario = Usuario.builder()
@@ -60,6 +61,7 @@ public class AuthService {
         Token token = generarVerificacionToken(registroUsuario);
         log.info("Se registro el usuario con exito y se envio el token para la activacion de la cuenta");
         enviarEmail(token.getToken(), email);
+//        mailService.sendNewPasswordEmail(nombres, clave, email);
         return token.getUsuario();
     }
 
