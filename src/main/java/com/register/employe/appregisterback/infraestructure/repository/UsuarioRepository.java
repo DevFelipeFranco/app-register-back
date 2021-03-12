@@ -20,6 +20,12 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long>, U
     }
 
     @Override
+    default Usuario crearUsuario(Usuario usuario) {
+        UsuarioEntity usuarioEntity = UsuarioTransformer.modelToEntity(usuario);
+        return UsuarioTransformer.entityToModel(save(usuarioEntity));
+    }
+
+    @Override
     default Usuario buscarUsuarioPorCorreoElectronico(String correoElectronico) {
         return UsuarioTransformer.entityToModel(findByCorreoElectronico(correoElectronico));
     }
@@ -32,6 +38,11 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long>, U
     @Override
     default void actualizarUsuario(String activo, Long idUsuario) {
         actualizarEstadoUsuario(activo, idUsuario);
+    }
+
+    @Override
+    default void eliminarPorId(Long idUsuario) {
+        deleteById(idUsuario);
     }
 
     UsuarioEntity findByUsuario(String usuario);

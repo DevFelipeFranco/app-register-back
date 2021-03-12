@@ -14,5 +14,5 @@ public class AutorizacionDTO {
 
     private Long idAutorizacion;
     private String autorizacion;
-    private RolDTO rolDTO;
+//    private RolDTO rolDTO;
 }

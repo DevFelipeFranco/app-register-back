@@ -15,5 +15,5 @@ public class RolDTO {
 
     private Long idRol;
     private String descripcion;
-    private List<AutorizacionDTO> autorizacionesDTO;
+    private List<AutorizacionDTO> autorizaciones;
 }

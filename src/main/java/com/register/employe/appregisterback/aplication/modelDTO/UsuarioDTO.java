@@ -1,10 +1,10 @@
 package com.register.employe.appregisterback.aplication.modelDTO;
 
-import com.register.employe.appregisterback.domain.model.Rol;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,12 +22,12 @@ public class UsuarioDTO {
     private String clave;
     private String correoElectronico;
     private LocalDateTime fechaRegistro;
-    private String snActivo;
-    private String snBloqueado;
+    private Boolean snActivo;
+    private Boolean snBloqueado;
     private LocalDateTime fechaUltimoIngreso;
     private LocalDateTime fechaUltimoIngresoVisualizacion;
-    private String imagenPerfil;
+    private MultipartFile imagenPerfil;
     private String imagenPerfilUrl;
-    private List<RolDTO> rolesDTO;
+    private List<RolDTO> roles;
 
 }

@@ -28,4 +28,5 @@ public final class AutorizacionTransformer {
 
     public static List<AutorizacionEntity> lstModelToEntity(List<Autorizacion> autorizacion) {
         return autorizacion.stream().map(AutorizacionTransformer::modelToEntity).collect(Collectors.toList());
-    }}
+    }
+}

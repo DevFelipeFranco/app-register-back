@@ -12,7 +12,7 @@ public class SecurityConstant {
     public static final String FORBIDDEN_MESSAGE = "Necesitas iniciar sesion para acceder a la pagina";
     public static final String ACCESS_DENIED_MESSAGE = "NO tienes permiso para acceder a esta pagina";
     public static final String OPTION_HTTP_METHOD = "OPTIONS";
-//    public static final String[] PUBLIC_URLS = {"/api/auth/login", "/api/auth/signup", "/api/user/resetclave/**", "/assets/images/**"};
-    public static final String[] PUBLIC_URLS = {"**"};
+    public static final String[] PUBLIC_URLS = {"/api/auth/accountVerification/**", "/api/auth/login", "/api/auth", "/api/auth/consultarUsuarios", "/api/auth/resetclave/**", "/api/auth/image/**"};
+//    public static final String[] PUBLIC_URLS = {"**"};
 
 }

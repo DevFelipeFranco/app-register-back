@@ -12,4 +12,8 @@ public interface UsuarioRepositorio {
     List<Usuario> consultarusuarios();
 
     void actualizarUsuario(String activo, Long idUsuario);
+
+    Usuario crearUsuario(Usuario usuario);
+
+    void eliminarPorId(Long idUsuario);
 }
